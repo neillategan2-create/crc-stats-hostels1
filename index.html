@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hostels 1 — 2026 Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #161923;
+    --surface2: #1e2430;
+    --border: #2a3244;
+    --accent: #e8b04b;
+    --accent2: #5b8fff;
+    --accent3: #4ecb8d;
+    --accent4: #f06b6b;
+    --text: #e8eaf0;
+    --text-muted: #7a8499;
+    --text-dim: #4a5568;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  /* ---- HEADER ---- */
+  .header {
+    background: linear-gradient(135deg, #0d0f14 0%, #161923 50%, #1a1f2e 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .header-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--accent);
+  }
+  .header-logo span { color: var(--text-muted); font-size: 16px; letter-spacing: 1px; }
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+  }
+  .nav-tab {
+    padding: 8px 18px;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .nav-tab:hover { color: var(--text); background: var(--surface2); }
+  .nav-tab.active { color: var(--accent); border-color: var(--accent); background: rgba(232,176,75,0.08); }
+  .header-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #1a7a3a;
+    background: #d4f5e0;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid #6fcf97;
+    font-weight: 600;
+  }
+  /* ---- HERO ---- */
+  .hero {
+    padding: 48px 40px 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 8vw, 96px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .hero-title .highlight { color: var(--accent); }
+  .hero-subtitle {
+    color: var(--text-muted);
+    font-size: 15px;
+    font-weight: 300;
+    max-width: 500px;
+    margin-bottom: 32px;
+  }
+  /* ---- KPI ROW ---- */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+    padding: 32px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .kpi-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--card-color, var(--accent));
+  }
+  .kpi-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .kpi-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    line-height: 1;
+    color: var(--card-color, var(--accent));
+    margin-bottom: 4px;
+  }
+  .kpi-sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    font-family: 'DM Mono', monospace;
+  }
+  /* ---- SECTIONS ---- */
+  .page { display: none; }
+  .page.active { display: block; }
+  .section {
+    padding: 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 2px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .section-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    font-weight: 300;
+  }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+  }
+  .card-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+  /* ---- CHART CONTAINERS ---- */
+  .chart-wrap {
+    position: relative;
+    width: 100%;
+    height: 240px;
+  }
+  .chart-wrap-tall { height: 300px; }
+  /* ---- DONUT LEGEND ---- */
+  .donut-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    align-items: center;
+  }
+  .donut-chart-wrap { height: 200px; position: relative; }
+  .legend-list { list-style: none; }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .legend-item:last-child { border-bottom: none; }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .legend-label { flex: 1; color: var(--text-muted); }
+  .legend-val { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; }
+  /* ---- HOMECELL BARS ---- */
+  .hc-bar-list { display: flex; flex-direction: column; gap: 12px; }
+  .hc-bar-item { }
+  .hc-bar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .hc-bar-name { font-size: 13px; font-weight: 500; }
+  .hc-bar-count { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--accent); }
+  .hc-bar-track {
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .hc-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--accent);
+    transition: width 1s cubic-bezier(0.4,0,0.2,1);
+  }
+  /* ---- STAT TABLE ---- */
+  .stat-table { width: 100%; border-collapse: collapse; }
+  .stat-table th {
+    text-align: left;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-table td {
+    padding: 10px 12px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--surface2);
+    color: var(--text-muted);
+  }
+  .stat-table td:first-child { color: var(--text); font-weight: 500; }
+  .stat-table td.num { font-family: 'DM Mono', monospace; color: var(--accent); }
+  .stat-table tr:last-child td { border-bottom: none; }
+  .stat-table tr:hover td { background: var(--surface2); }
+  /* ---- PILLS ---- */
+  .pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .pill-green { background: rgba(78,203,141,0.15); color: var(--accent3); }
+  .pill-blue { background: rgba(91,143,255,0.15); color: var(--accent2); }
+  .pill-yellow { background: rgba(232,176,75,0.15); color: var(--accent); }
+  .pill-red { background: rgba(240,107,107,0.15); color: var(--accent4); }
+  /* ---- MEMBER LIST ---- */
+  .member-search {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    margin-bottom: 20px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .member-search:focus { border-color: var(--accent); }
+  .member-search::placeholder { color: var(--text-dim); }
+  /* ---- GOAL PROGRESS ---- */
+  .goal-item {
+    margin-bottom: 20px;
+  }
+  .goal-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .goal-label { font-size: 13px; font-weight: 500; }
+  .goal-nums { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text-muted); }
+  .goal-nums span { color: var(--accent); }
+  .goal-track {
+    height: 8px;
+    background: var(--surface2);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 4px;
+  }
+  .goal-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .goal-note { font-size: 11px; color: var(--text-dim); }
+  /* ---- INSIGHT BOX ---- */
+  .insight-box {
+    background: rgba(232,176,75,0.06);
+    border: 1px solid rgba(232,176,75,0.2);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 20px;
+  }
+  .insight-box .insight-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .insight-box p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  /* ---- FOOTER ---- */
+  footer {
+    padding: 32px 40px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+  }
+  /* ---- ANIMATIONS ---- */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up {
+    animation: fadeUp 0.5s ease both;
+  }
+  .fade-up-1 { animation-delay: 0.05s; }
+  .fade-up-2 { animation-delay: 0.10s; }
+  .fade-up-3 { animation-delay: 0.15s; }
+  .fade-up-4 { animation-delay: 0.20s; }
+  .fade-up-5 { animation-delay: 0.25s; }
+  .fade-up-6 { animation-delay: 0.30s; }
+  @media (max-width: 900px) {
+    .kpi-row { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .hero { padding: 32px 20px 24px; }
+    .section { padding: 28px 20px; }
+    .kpi-row { padding: 20px; }
+    .header { padding: 0 20px; }
+  }
+</style>
+</head>
+<body>
+<!-- HEADER -->
+<header class="header">
+  <div class="header-logo">HOSTELS 1 <span>/ SZ2</span></div>
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('overview')">Overview</button>
+    <button class="nav-tab" onclick="showPage('attendance')">Attendance</button>
+    <button class="nav-tab" onclick="showPage('salvations')">Salvations</button>
+    <button class="nav-tab" onclick="showPage('goals')">Goals</button>
+  </nav>
+  <div class="header-badge" id="last-updated">2026 • LIVE DATA</div>
+</header>
+
+<!-- KPI ROW (always visible) -->
+<div class="kpi-row">
+  <div class="kpi-card fade-up fade-up-1" style="--card-color: #e8b04b">
+    <div class="kpi-label">Total Members</div>
+    <div class="kpi-number">105</div>
+    <div class="kpi-sub">Across 8 homecells</div>
+  </div>
+  <div class="kpi-card fade-up fade-up-2" style="--card-color: #5b8fff">
+    <div class="kpi-label">Salvations (YTD)</div>
+    <div class="kpi-number">39</div>
+    <div class="kpi-sub">Jan – Apr 2026</div>
+  </div>
+  <div class="kpi-card fade-up fade-up-3" style="--card-color: #4ecb8d">
+    <div class="kpi-label">FTV's (YTD)</div>
+    <div class="kpi-number">127</div>
+    <div class="kpi-sub">First time visitors</div>
+  </div>
+  <div class="kpi-card fade-up fade-up-4" style="--card-color: #f06b6b">
+    <div class="kpi-label">Water Baptised</div>
+    <div class="kpi-number">93</div>
+    <div class="kpi-sub">89% of members</div>
+  </div>
+  <div class="kpi-card fade-up fade-up-5" style="--card-color: #bb8de8">
+    <div class="kpi-label">Want Membership</div>
+    <div class="kpi-number">63</div>
+    <div class="kpi-sub">FTVs expressed interest</div>
+  </div>
+  <div class="kpi-card fade-up fade-up-6" style="--card-color: #06b6d4">
+    <div class="kpi-label">Protocols</div>
+    <div class="kpi-number">21</div>
+    <div class="kpi-sub">Prodigal group</div>
+  </div>
+</div>
+
+<!-- ==================== OVERVIEW PAGE ==================== -->
+<div id="page-overview" class="page active">
+  <div class="section">
+    <div class="section-title">Structure Overview</div>
+    <div class="section-sub">Homecell breakdown, demographics & discipleship milestones</div>
+    <div class="grid-2">
+      <!-- Homecell member counts -->
+      <div class="card">
+        <div class="card-title">Members per Homecell</div>
+        <div class="hc-bar-list" id="hcBarList"></div>
+      </div>
+      <!-- Ethnic / Gender donuts -->
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <div class="card">
+          <div class="card-title">Ethnic Breakdown</div>
+          <div class="donut-grid">
+            <div class="donut-chart-wrap">
+              <canvas id="ethnicChart"></canvas>
+            </div>
+            <ul class="legend-list" id="ethnicLegend"></ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Gender Breakdown</div>
+          <div class="donut-grid">
+            <div class="donut-chart-wrap">
+              <canvas id="genderChart"></canvas>
+            </div>
+            <ul class="legend-list" id="genderLegend"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Discipleship milestones -->
+    <div class="card" style="margin-top:20px;">
+      <div class="card-title">Discipleship Milestones — out of 105 members</div>
+      <div class="grid-3" style="margin-top:4px;">
+        <div>
+          <div class="goal-item">
+            <div class="goal-header">
+              <span class="goal-label">Water Baptism</span>
+              <span class="goal-nums"><span>93</span> / 105</span>
+            </div>
+            <div class="goal-track"><div class="goal-fill" style="width:88.6%;background:#5b8fff;"></div></div>
+            <div class="goal-note">88.6% completed</div>
+          </div>
+          <div class="goal-item">
+            <div class="goal-header">
+              <span class="goal-label">HS Baptism</span>
+              <span class="goal-nums"><span>93</span> / 105</span>
+            </div>
+            <div class="goal-track"><div class="goal-fill" style="width:88.6%;background:#e8b04b;"></div></div>
+            <div class="goal-note">88.6% completed</div>
+          </div>
+        </div>
+        <div>
+          <div class="goal-item">
+            <div class="goal-header">
+              <span class="goal-label">John 3:16 (NMO)</span>
+              <span class="goal-nums"><span>66</span> / 105</span>
+            </div>
+            <div class="goal-track"><div class="goal-fill" style="width:62.9%;background:#4ecb8d;"></div></div>
+            <div class="goal-note">62.9% completed</div>
+          </div>
+          <div class="goal-item">
+            <div class="goal-header">
+              <span class="goal-label">Spiritual Gifts</span>
+              <span class="goal-nums"><span>62</span> / 105</span>
+            </div>
+            <div class="goal-track"><div class="goal-fill" style="width:59%;background:#4ecb8d;"></div></div>
+            <div class="goal-note">59% completed</div>
+          </div>
+        </div>
+        <div>
+          <div class="goal-item">
+            <div class="goal-header">
+              <span class="goal-label">Serving</span>
+              <span class="goal-nums"><span>9</span> / 105</span>
+            </div>
+            <div class="goal-track"><div class="goal-fill" style="width:8.6%;background:#f06b6b;"></div></div>
+            <div class="goal-note">8.6% active</div>
+          </div>
+          <div class="goal-item">
+            <div class="goal-header">
+              <span class="goal-label">Tithing</span>
+              <span class="goal-nums"><span>3</span> / 105</span>
+            </div>
+            <div class="goal-track"><div class="goal-fill" style="width:2.9%;background:#f06b6b;"></div></div>
+            <div class="goal-note">2.9% active</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-title">Key Insight</div>
+      <p>Water & HS Baptism are strong at <strong>89%</strong>. However, Serving (9%) and Tithing (3%) show significant discipleship gaps — these are priority growth areas. The ethnic ratio currently sits at <strong>69% White / 26% Black / 5% Coloured / 1% Indian</strong>, with a stated vision goal of 50/45/5%.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ATTENDANCE PAGE ==================== -->
+<div id="page-attendance" class="page">
+  <div class="section">
+    <div class="section-title">Attendance Overview</div>
+    <div class="section-sub">Weekly attendance trends — Jan to Apr 2026</div>
+    <div class="grid-2" style="margin-bottom:20px;">
+      <div class="card">
+        <div class="card-title">Homecell Members Weekly</div>
+        <div class="chart-wrap chart-wrap-tall">
+          <canvas id="hcMembersChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Church Attendance by Service</div>
+        <div class="chart-wrap chart-wrap-tall">
+          <canvas id="churchMembersChart"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-title">Attendance Insight</div>
+      <p>Homecell attendance peaked on <strong>Mar 15 (27 members)</strong>. Church PM service consistently stronger than AM (avg 17 vs 3 members). Peak FTV week was <strong>Feb 15 (15 FTVs)</strong>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SALVATIONS PAGE ==================== -->
+<div id="page-salvations" class="page">
+  <div class="section">
+    <div class="section-title">Salvations</div>
+    <div class="section-sub">All Hostels 1 salvations — Jan to Apr 2026 · 39 total</div>
+    <div class="grid-3" style="margin-bottom:20px;">
+      <div class="card" style="text-align:center;">
+        <div class="card-title">Total Salvations</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:72px;color:var(--accent2);line-height:1;">39</div>
+        <div style="font-size:12px;color:var(--text-muted);">Jan – Apr 2026</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="card-title">Followed Up</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:72px;color:var(--accent3);line-height:1;">39</div>
+        <div style="font-size:12px;color:var(--text-muted);">100% contact made</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="card-title">Attended HC After Salv</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:72px;color:var(--accent4);line-height:1;">4</div>
+        <div style="font-size:12px;color:var(--text-muted);">10% conversion to HC</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Salvation to Discipleship Funnel</div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px;">
+        <div class="goal-item">
+          <div class="goal-header">
+            <span class="goal-label">Salvations recorded</span>
+            <span class="goal-nums"><span>39</span> total</span>
+          </div>
+          <div class="goal-track"><div class="goal-fill" style="width:100%;background:#5b8fff;"></div></div>
+        </div>
+        <div class="goal-item">
+          <div class="goal-header">
+            <span class="goal-label">Followed up</span>
+            <span class="goal-nums"><span>39</span> / 39</span>
+          </div>
+          <div class="goal-track"><div class="goal-fill" style="width:100%;background:#4ecb8d;"></div></div>
+          <div class="goal-note">100% contacted — excellent!</div>
+        </div>
+        <div class="goal-item">
+          <div class="goal-header">
+            <span class="goal-label">Attended homecell</span>
+            <span class="goal-nums"><span>4</span> / 39</span>
+          </div>
+          <div class="goal-track"><div class="goal-fill" style="width:10%;background:#f06b6b;"></div></div>
+          <div class="goal-note">10% — key growth opportunity to improve HC integration</div>
+        </div>
+      </div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-title">Strategic Priority</div>
+      <p>While follow-up rate is excellent (100%), HC integration of salvations remains low (10%). Implementing a structured "new believer integration" pathway into homecells could significantly accelerate discipleship depth.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== GOALS PAGE ==================== -->
+<div id="page-goals" class="page">
+  <div class="section">
+    <div class="section-title">Vision &amp; Goals</div>
+    <div class="section-sub">Tracking structure targets and strategic priorities</div>
+    <div class="grid-2" style="margin-bottom:20px;">
+      <div class="card">
+        <div class="card-title">Membership Growth Target</div>
+        <div style="margin-top:8px;">
+          <div class="goal-item">
+            <div class="goal-header">
+              <span class="goal-label">2025 Target</span>
+              <span class="goal-nums"><span>401</span> / 401</span>
+            </div>
+            <div class="goal-track"><div class="goal-fill" style="width:100%;background:#4ecb8d;"></div></div>
+            <div class="goal-note" style="color:var(--accent3);">✓ Achieved</div>
+          </div>
+          <div class="goal-item">
+            <div class="goal-header">
+              <span class="goal-label">2026 Target</span>
+              <span class="goal-nums"><span>105</span> / 500</span>
+            </div>
+            <div class="goal-track"><div class="goal-fill" style="width:21%;background:#e8b04b;"></div></div>
+            <div class="goal-note">21% toward 500 — on track for mid-year</div>
+          </div>
+          <div class="goal-item">
+            <div class="goal-header">
+              <span class="goal-label">2027 Target</span>
+              <span class="goal-nums"><span>—</span> / 3000</span>
+            </div>
+            <div class="goal-track"><div class="goal-fill" style="width:3.5%;background:#5b8fff;"></div></div>
+            <div class="goal-note">Long-range vision goal</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Ethnic Ratio Goal — 50% / 45% / 5%</div>
+        <div style="margin-top:8px;">
+          <div class="goal-item">
+            <div class="goal-header">
+              <span class="goal-label">White — Current 69%</span>
+              <span class="goal-nums">Target <span>50%</span></span>
+            </div>
+            <div class="goal-track">
+              <div class="goal-fill" style="width:69%;background:#f06b6b;"></div>
+            </div>
+            <div class="goal-note" style="color:var(--accent4);">19% above target</div>
+          </div>
+          <div class="goal-item">
+            <div class="goal-header">
+              <span class="goal-label">Black — Current 26%</span>
+              <span class="goal-nums">Target <span>45%</span></span>
+            </div>
+            <div class="goal-track">
+              <div class="goal-fill" style="width:26%;background:#5b8fff;"></div>
+            </div>
+            <div class="goal-note">19% below target — key recruitment priority</div>
+          </div>
+          <div class="goal-item">
+            <div class="goal-header">
+              <span class="goal-label">Coloured — Current 5%</span>
+              <span class="goal-nums">Target <span>5%</span></span>
+            </div>
+            <div class="goal-track">
+              <div class="goal-fill" style="width:5%;background:#4ecb8d;"></div>
+            </div>
+            <div class="goal-note" style="color:var(--accent3);">✓ On target</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">5 Key Challenges Identified</div>
+      <table class="stat-table">
+        <thead><tr><th>#</th><th>Challenge</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td class="num">01</td><td>Ethnic Ratio Balance</td><td><span class="pill pill-red">In Progress</span></td></tr>
+          <tr><td class="num">02</td><td>FIN (Financial / Tithing)</td><td><span class="pill pill-red">Priority</span></td></tr>
+          <tr><td class="num">03</td><td>Culture Building</td><td><span class="pill pill-yellow">Ongoing</span></td></tr>
+          <tr><td class="num">04</td><td>Raising New Leaders</td><td><span class="pill pill-blue">Active</span></td></tr>
+          <tr><td class="num">05</td><td>HC Integration of Salvations</td><td><span class="pill pill-red">Priority</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<footer>HOSTELS 1 — SZ2 &nbsp;|&nbsp; 2026 MINISTRY REPORT &nbsp;|&nbsp; DATA AS OF MAY 2026</footer>
+
+<script>
+// ============================================================
+// DATA FROM EXCEL
+// ============================================================
+const HC_DATA = [
+  { name: 'NWU Rugby',  count: 24 },
+  { name: 'Hombre',     count: 15 },
+  { name: 'Oakbridge 1',count: 13 },
+  { name: 'Overs',      count: 12 },
+  { name: 'Villagers',  count:  7 },
+  { name: 'Oakbridge 2',count:  7 },
+  { name: 'Caput',      count:  6 },
+];
+
+const WEEK_LABELS = ['Jan 4','Jan 11','Jan 18','Jan 25','Feb 1','Feb 8','Feb 15','Feb 22','Mar 1','Mar 8','Mar 15','Mar 22','Mar 29','Apr 5','Apr 12','Apr 19'];
+
+const CHURCH = {
+  amMembers:  [0,0,0,0,0,2,4,3,3,1,3,3,3,2,2,3],
+  pmMembers:  [0,0,0,2,10,19,20,17,17,15,18,17,15,14,16,17],
+};
+
+const HC_ATT = {
+  members:  [0,0,0,0,6,20,23,23,25,16,27,18,21,20,13,0],
+};
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ============================================================
+// OVERVIEW — HC BARS
+// ============================================================
+function buildHCBars() {
+  const max = Math.max(...HC_DATA.map(h => h.count));
+  const list = document.getElementById('hcBarList');
+  const colors = ['#e8b04b','#5b8fff','#4ecb8d','#f06b6b','#bb8de8','#e8b04b','#5b8fff','#4ecb8d'];
+  HC_DATA.forEach((h, i) => {
+    const pct = (h.count / max * 100).toFixed(1);
+    list.innerHTML += `
+      <div class="hc-bar-item">
+        <div class="hc-bar-header">
+          <span class="hc-bar-name">${h.name}</span>
+          <span class="hc-bar-count">${h.count}</span>
+        </div>
+        <div class="hc-bar-track">
+          <div class="hc-bar-fill" style="width:0%;background:${colors[i]};" data-width="${pct}"></div>
+        </div>
+      </div>`;
+  });
+  setTimeout(() => {
+    document.querySelectorAll('.hc-bar-fill').forEach(el => {
+      el.style.width = el.dataset.width + '%';
+    });
+  }, 200);
+}
+
+// ============================================================
+// DONUT CHARTS
+// ============================================================
+function makeDonut(id, labels, data, colors, legendId) {
+  const ctx = document.getElementById(id).getContext('2d');
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0, hoverOffset: 4 }] },
+    options: {
+      cutout: '72%',
+      plugins: { legend: { display: false }, tooltip: { callbacks: {
+        label: ctx => ` ${ctx.label}: ${ctx.raw}`
+      }}},
+      animation: { animateRotate: true, duration: 1000 }
+    }
+  });
+  if (legendId) {
+    const leg = document.getElementById(legendId);
+    const total = data.reduce((a,b) => a+b, 0);
+    labels.forEach((l, i) => {
+      const pct = ((data[i]/total)*100).toFixed(1);
+      leg.innerHTML += `<li class="legend-item">
+        <span class="legend-dot" style="background:${colors[i]};"></span>
+        <span class="legend-label">${l}</span>
+        <span class="legend-val">${data[i]} <span style="color:var(--text-dim);font-size:10px;">(${pct}%)</span></span>
+      </li>`;
+    });
+  }
+}
+
+// ============================================================
+// CHART DEFAULTS
+// ============================================================
+Chart.defaults.color = '#7a8499';
+Chart.defaults.borderColor = '#2a3244';
+Chart.defaults.font.family = 'DM Sans';
+
+function lineChart(id, labels, datasets, opts = {}) {
+  const ctx = document.getElementById(id).getContext('2d');
+  return new Chart(ctx, {
+    type: 'line',
+    data: { labels, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: { legend: { display: datasets.length > 1, position: 'top', labels: { boxWidth: 10, font: { size: 11 } } }, tooltip: { } },
+      scales: {
+        x: { grid: { color: '#1e2430' }, ticks: { font: { size: 10 } } },
+        y: { grid: { color: '#1e2430' }, beginAtZero: true, ticks: { font: { size: 10 } } }
+      },
+      ...opts
+    }
+  });
+}
+
+function mkLine(color) {
+  return { borderColor: color, backgroundColor: color + '22', tension: 0.4, fill: true, pointRadius: 3, pointHoverRadius: 5, borderWidth: 2 };
+}
+
+// ============================================================
+// BUILD CHARTS
+// ============================================================
+function buildAttendanceCharts() {
+  lineChart('hcMembersChart', WEEK_LABELS, [
+    { label: 'HC Members', data: HC_ATT.members, ...mkLine('#4ecb8d') }
+  ]);
+  lineChart('churchMembersChart', WEEK_LABELS, [
+    { label: 'AM Members', data: CHURCH.amMembers, ...mkLine('#e8b04b') },
+    { label: 'PM Members', data: CHURCH.pmMembers, ...mkLine('#5b8fff') },
+  ]);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  buildHCBars();
+  makeDonut('ethnicChart',
+    ['White','Black','Coloured','Indian'],
+    [72,27,5,1],
+    ['#e8b04b','#5b8fff','#4ecb8d','#bb8de8'],
+    'ethnicLegend');
+  makeDonut('genderChart',
+    ['Male','Female'],
+    [102,3],
+    ['#5b8fff','#f06b6b'],
+    'genderLegend');
+  buildAttendanceCharts();
+
+  const d = new Date(document.lastModified);
+  const opts = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
+  document.getElementById('last-updated').textContent = 'Updated ' + d.toLocaleString('en-ZA', opts);
+});
+</script>
+</body>
+</html>
