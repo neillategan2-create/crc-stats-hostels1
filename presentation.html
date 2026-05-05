@@ -483,6 +483,7 @@ body {
 .tag-green { background: rgba(78,203,141,0.15); color: #4ecb8d; border: 1px solid rgba(78,203,141,0.3); }
 .tag-purple { background: rgba(160,96,208,0.15); color: #a060d0; border: 1px solid rgba(160,96,208,0.3); }
 .tag-orange { background: rgba(240,160,80,0.15); color: #f0a050; border: 1px solid rgba(240,160,80,0.3); }
+.tag-teal   { background: rgba(32,200,190,0.15); color: #20c8be; border: 1px solid rgba(32,200,190,0.3); }
 
 .roadmap-icon {
   font-size: 36px;
@@ -1302,6 +1303,42 @@ body {
         </ul>
       </div>
 
+      <!-- TEACHING GUIDE -->
+      <div class="roadmap-card" style="grid-column: 1 / -1;">
+        <div class="roadmap-card-bg" style="background:#20c8be"></div>
+        <span class="roadmap-tag tag-teal">Phase 4 · Discipleship</span>
+        <span class="roadmap-icon">📖</span>
+        <div class="roadmap-title">AI-Generated Teaching Guides</div>
+        <p class="roadmap-body">
+          Take any leadership or discipleship book — <em>Honor's Reward</em> by John Bevere,
+          <em>Lead Like It Matters</em> by Craig Groeschel, <em>Killing Kryptonite</em>,
+          <em>All In</em> by Mark Batterson — and use AI to turn it into a structured,
+          ready-to-teach curriculum. Four weeks of sessions per book, designed for
+          one-on-one or small group delivery. Overseer teaches leaders. Leaders teach members.
+          The same material cascades through every level of the zone.
+        </p>
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:16px;">
+          <div style="background:var(--surface3); border:1px solid var(--border); border-radius:10px; padding:16px;">
+            <div style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#20c8be; margin-bottom:8px;">INPUT</div>
+            <p style="font-size:13px; color:var(--text-muted); line-height:1.6;">Paste any book into Claude. The AI reads it and structures the core principles into teachable units.</p>
+          </div>
+          <div style="background:var(--surface3); border:1px solid var(--border); border-radius:10px; padding:16px;">
+            <div style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#20c8be; margin-bottom:8px;">OUTPUT</div>
+            <p style="font-size:13px; color:var(--text-muted); line-height:1.6;">4-week teaching guide — weekly theme, key scriptures, discussion questions, and practical application for leaders to use.</p>
+          </div>
+          <div style="background:var(--surface3); border:1px solid var(--border); border-radius:10px; padding:16px;">
+            <div style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#20c8be; margin-bottom:8px;">FLOW</div>
+            <p style="font-size:13px; color:var(--text-muted); line-height:1.6;">Overseer → Leader (one-on-one) → Member. One book. One message. Moving through the entire zone.</p>
+          </div>
+        </div>
+        <ul class="roadmap-bullets" style="margin-top:20px;">
+          <li>Works with any book — honour, leadership, faith, discipleship</li>
+          <li>Guides stored in the platform and accessible to all leaders</li>
+          <li>Builds a library of teaching material over time</li>
+          <li>Creates consistency of message across every structure and home cell</li>
+        </ul>
+      </div>
+
     </div>
   </div>
 
@@ -1347,6 +1384,11 @@ body {
       <div class="vision-card">
         <div class="vision-num">05</div>
         <div class="vision-label">Goals Tracking<br><span style="color:var(--text-dim); font-size:11px">Targets vs actual · Zone view</span></div>
+      </div>
+
+      <div class="vision-card">
+        <div class="vision-num">06</div>
+        <div class="vision-label">Teaching Guides<br><span style="color:var(--text-dim); font-size:11px">AI curriculum · Books → Sessions</span></div>
       </div>
 
       <div class="vision-card">
