@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRC Stats — Platform Presentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --crc-red: #c8253a;
+  --crc-pink: #d9345c;
+  --crc-purple: #7b2fa8;
+  --crc-deep: #4a1878;
+  --grad: linear-gradient(135deg, #c8253a 0%, #a02080 50%, #5a1a9a 100%);
+  --grad-soft: linear-gradient(135deg, rgba(200,37,58,0.15) 0%, rgba(91,26,154,0.15) 100%);
+  --bg: #080910;
+  --surface: #0f1018;
+  --surface2: #161720;
+  --surface3: #1e1f2e;
+  --border: #252638;
+  --border-light: #2e3048;
+  --text: #f0f1f8;
+  --text-muted: #8890b0;
+  --text-dim: #444870;
+  --white: #ffffff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════ */
+.topnav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  background: rgba(8,9,16,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.nav-logo-circle {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--grad);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: #fff;
+  box-shadow: 0 0 16px rgba(200,37,58,0.4);
+}
+
+.nav-logo-text {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 3px;
+  color: var(--text-muted);
+}
+
+.nav-logo-text span {
+  color: var(--text);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-link {
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.nav-link:hover { color: var(--text); background: var(--surface3); }
+
+.nav-badge {
+  background: var(--grad);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+/* ═══════════════════════════════════════════════
+   SLIDE SYSTEM
+═══════════════════════════════════════════════ */
+.slide {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 80px 0 60px;
+}
+
+.slide-inner {
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 60px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Slide dividers */
+.slide + .slide { border-top: 1px solid var(--border); }
+
+/* Background decorations */
+.slide-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════
+   SLIDE 1 — HERO / TITLE
+═══════════════════════════════════════════════ */
+#slide-hero {
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+.hero-orb-1 {
+  width: 600px; height: 600px;
+  background: var(--crc-red);
+  top: -200px; right: -200px;
+}
+
+.hero-orb-2 {
+  width: 400px; height: 400px;
+  background: var(--crc-purple);
+  bottom: -100px; left: -100px;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(200,37,58,0.12);
+  border: 1px solid rgba(200,37,58,0.3);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #e86075;
+  margin-bottom: 32px;
+}
+
+.hero-eyebrow .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #e86075;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.hero-crc-logo {
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  background: var(--grad);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 38px;
+  letter-spacing: 2px;
+  color: #fff;
+  margin-bottom: 36px;
+  box-shadow: 0 0 60px rgba(200,37,58,0.5), 0 0 120px rgba(122,47,168,0.3);
+  position: relative;
+}
+
+.hero-crc-logo::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: var(--grad);
+  opacity: 0.3;
+  filter: blur(8px);
+  z-index: -1;
+}
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(60px, 9vw, 110px);
+  line-height: 0.92;
+  letter-spacing: 2px;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+
+.hero-title .grad-text {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-desc {
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--text-muted);
+  max-width: 560px;
+  line-height: 1.7;
+  margin-bottom: 48px;
+}
+
+.hero-stats-row {
+  display: flex;
+  gap: 40px;
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hero-stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 42px;
+  line-height: 1;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION LABELS
+═══════════════════════════════════════════════ */
+.section-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 2px;
+  background: var(--grad);
+  border-radius: 2px;
+}
+
+.section-eyebrow.red { color: var(--crc-red); }
+.section-eyebrow.purple { color: #a060d0; }
+.section-eyebrow.future { color: #5b9fff; }
+
+.section-heading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(36px, 5vw, 62px);
+  line-height: 1;
+  letter-spacing: 2px;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+
+.section-body {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--text-muted);
+  max-width: 620px;
+  line-height: 1.75;
+  margin-bottom: 48px;
+}
+
+/* ═══════════════════════════════════════════════
+   CARDS / FEATURE GRID
+═══════════════════════════════════════════════ */
+.feat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.feat-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.feat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s;
+}
+
+.feat-card:hover {
+  border-color: rgba(200,37,58,0.4);
+  transform: translateY(-3px);
+}
+
+.feat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--card-accent, var(--grad));
+}
+
+.feat-icon {
+  font-size: 28px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.feat-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 1.5px;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.feat-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+
+/* ═══════════════════════════════════════════════
+   HOW IT WORKS — PIPELINE
+═══════════════════════════════════════════════ */
+.pipeline {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 48px 0;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.pipeline-step {
+  flex: 1;
+  min-width: 160px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 20px;
+  text-align: center;
+  position: relative;
+}
+
+.pipeline-step::after {
+  content: '→';
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: var(--text-dim);
+  z-index: 2;
+  width: 40px;
+  text-align: center;
+}
+
+.pipeline-step:last-child::after { display: none; }
+
+.pipeline-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.pipeline-title {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.pipeline-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.pipeline-gap { width: 40px; flex-shrink: 0; }
+
+/* ═══════════════════════════════════════════════
+   FUTURE ROADMAP CARDS
+═══════════════════════════════════════════════ */
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.roadmap-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.roadmap-card:hover {
+  border-color: var(--border-light);
+}
+
+.roadmap-card-bg {
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  opacity: 0.06;
+}
+
+.roadmap-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.tag-blue { background: rgba(91,159,255,0.15); color: #5b9fff; border: 1px solid rgba(91,159,255,0.3); }
+.tag-green { background: rgba(78,203,141,0.15); color: #4ecb8d; border: 1px solid rgba(78,203,141,0.3); }
+.tag-purple { background: rgba(160,96,208,0.15); color: #a060d0; border: 1px solid rgba(160,96,208,0.3); }
+.tag-orange { background: rgba(240,160,80,0.15); color: #f0a050; border: 1px solid rgba(240,160,80,0.3); }
+
+.roadmap-icon {
+  font-size: 36px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.roadmap-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  letter-spacing: 1.5px;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.roadmap-body {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.roadmap-bullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.roadmap-bullets li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.roadmap-bullets li::before {
+  content: '◆';
+  font-size: 6px;
+  color: var(--text-dim);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════
+   DASHBOARD PREVIEW MOCKUP
+═══════════════════════════════════════════════ */
+.mockup-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+}
+
+.mockup-bar {
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mockup-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+
+.mockup-dot.red { background: #e86075; }
+.mockup-dot.yellow { background: #e8b04b; }
+.mockup-dot.green { background: #4ecb8d; }
+
+.mockup-url {
+  flex: 1;
+  background: var(--surface3);
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-left: 12px;
+}
+
+.mockup-body {
+  padding: 20px;
+}
+
+.mockup-header {
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mockup-logo-text {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 3px;
+  color: #e8b04b;
+}
+
+.mockup-tabs {
+  display: flex;
+  gap: 6px;
+}
+
+.mockup-tab {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 10px;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.mockup-tab.active {
+  color: #e8b04b;
+  border-color: #e8b04b;
+  background: rgba(232,176,75,0.08);
+}
+
+.mockup-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.mockup-kpi {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.mockup-kpi-label {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.mockup-kpi-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.kpi-gold { color: #e8b04b; }
+.kpi-blue { color: #5b8fff; }
+.kpi-green { color: #4ecb8d; }
+.kpi-red { color: #f06b6b; }
+
+.mockup-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.mockup-chart-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+  height: 90px;
+  position: relative;
+  overflow: hidden;
+}
+
+.mockup-chart-title {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.mockup-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 48px;
+}
+
+.m-bar {
+  flex: 1;
+  border-radius: 3px 3px 0 0;
+  background: rgba(91,143,255,0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.m-bar::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(91,143,255,0.7);
+  height: 30%;
+}
+
+.mockup-line {
+  position: absolute;
+  bottom: 20px; left: 14px; right: 14px;
+  height: 40px;
+}
+
+.mockup-line svg { width: 100%; height: 100%; }
+
+/* ═══════════════════════════════════════════════
+   VISION / CLOSING SLIDE
+═══════════════════════════════════════════════ */
+.vision-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 48px;
+}
+
+.vision-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.vision-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--grad);
+}
+
+.vision-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px;
+  line-height: 1;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.vision-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+/* ═══════════════════════════════════════════════
+   TWO-COLUMN LAYOUT
+═══════════════════════════════════════════════ */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.two-col.flip { direction: rtl; }
+.two-col.flip > * { direction: ltr; }
+
+/* ═══════════════════════════════════════════════
+   HIGHLIGHT BOX
+═══════════════════════════════════════════════ */
+.highlight-box {
+  background: var(--grad-soft);
+  border: 1px solid rgba(200,37,58,0.25);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin: 32px 0;
+}
+
+.highlight-box p {
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.highlight-box strong {
+  color: #e86075;
+  font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════════
+   SLIDE NUMBERS / PROGRESS
+═══════════════════════════════════════════════ */
+.slide-number {
+  position: absolute;
+  bottom: 32px;
+  right: 60px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+/* ═══════════════════════════════════════════════
+   CLOSING / CTA
+═══════════════════════════════════════════════ */
+.cta-section {
+  text-align: center;
+  padding: 100px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-orb {
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: var(--grad);
+  opacity: 0.08;
+  filter: blur(60px);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.cta-logo {
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: var(--grad);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 44px;
+  letter-spacing: 2px;
+  color: #fff;
+  margin: 0 auto 40px;
+  box-shadow: 0 0 80px rgba(200,37,58,0.4), 0 0 160px rgba(122,47,168,0.2);
+}
+
+.cta-heading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 6vw, 80px);
+  letter-spacing: 2px;
+  line-height: 1;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+.cta-heading .grad-text {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.cta-body {
+  font-size: 17px;
+  font-weight: 300;
+  color: var(--text-muted);
+  max-width: 540px;
+  margin: 0 auto 48px;
+  line-height: 1.7;
+}
+
+.cta-url {
+  display: inline-block;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.cta-url span { color: #e86075; }
+
+/* ═══════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════ */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 32px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-logo-circle {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--grad);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 11px;
+  color: #fff;
+}
+
+.footer-logo-text {
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+.footer-right {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-family: 'DM Mono', monospace;
+}
+
+/* ═══════════════════════════════════════════════
+   DIVIDER
+═══════════════════════════════════════════════ */
+.grad-divider {
+  height: 1px;
+  background: var(--grad);
+  opacity: 0.3;
+  margin: 48px 0;
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .slide-inner { padding: 0 32px; }
+  .feat-grid { grid-template-columns: 1fr 1fr; }
+  .two-col { grid-template-columns: 1fr; gap: 40px; }
+  .roadmap-grid { grid-template-columns: 1fr; }
+  .vision-grid { grid-template-columns: 1fr 1fr; }
+  .pipeline { flex-direction: column; gap: 12px; }
+  .pipeline-step::after { display: none; }
+  .hero-stats-row { gap: 24px; }
+  .topnav { padding: 0 24px; }
+  .nav-links { display: none; }
+}
+
+@media (max-width: 600px) {
+  .feat-grid { grid-template-columns: 1fr; }
+  .mockup-kpis { grid-template-columns: 1fr 1fr; }
+  .vision-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     TOP NAV
+══════════════════════════════════════════ -->
+<nav class="topnav">
+  <div class="nav-logo">
+    <div class="nav-logo-circle">CRC</div>
+    <div class="nav-logo-text"><span>CRC</span> STATS PLATFORM</div>
+  </div>
+  <div class="nav-links">
+    <a class="nav-link" href="#slide-hero">Overview</a>
+    <a class="nav-link" href="#slide-built">What We Built</a>
+    <a class="nav-link" href="#slide-how">How It Works</a>
+    <a class="nav-link" href="#slide-future">Roadmap</a>
+    <a class="nav-link" href="#slide-vision">Vision</a>
+  </div>
+  <div class="nav-badge">LIVE PLATFORM</div>
+</nav>
+
+
+<!-- ══════════════════════════════════════════
+     SLIDE 1 — HERO
+══════════════════════════════════════════ -->
+<section class="slide" id="slide-hero">
+  <div class="slide-bg-orb hero-orb-1"></div>
+  <div class="slide-bg-orb hero-orb-2"></div>
+
+  <div class="slide-inner">
+    <div class="hero-eyebrow">
+      <span class="dot"></span>
+      CRC Regions &amp; Structures · 2026
+    </div>
+
+    <div class="hero-crc-logo">CRC</div>
+
+    <h1 class="hero-title">
+      DATA-DRIVEN<br>
+      <span class="grad-text">LEADERSHIP</span>
+    </h1>
+
+    <p class="hero-desc">
+      A live statistics platform built for CRC Hostels 1 — tracking home cells,
+      attendance, and member growth in real time, with a vision to serve the entire zone.
+    </p>
+
+    <div class="hero-stats-row">
+      <div class="hero-stat">
+        <div class="hero-stat-num">LIVE</div>
+        <div class="hero-stat-label">Dashboard Status</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">H1</div>
+        <div class="hero-stat-label">Structure Active</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">2026</div>
+        <div class="hero-stat-label">Season Year</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">∞</div>
+        <div class="hero-stat-label">Scalable</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-number">01 / 06</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     SLIDE 2 — WHAT WE BUILT
+══════════════════════════════════════════ -->
+<section class="slide" id="slide-built">
+  <div class="slide-inner">
+    <div class="section-eyebrow red">What We Built</div>
+    <h2 class="section-heading">THE HOSTELS 1<br>DASHBOARD</h2>
+    <p class="section-body">
+      A fully custom, live web dashboard designed specifically for Hostels 1 —
+      pulling real data from Google Sheets and presenting it in a clean,
+      professional interface accessible from any device.
+    </p>
+
+    <!-- Dashboard mockup -->
+    <div class="mockup-wrap">
+      <div class="mockup-bar">
+        <div class="mockup-dot red"></div>
+        <div class="mockup-dot yellow"></div>
+        <div class="mockup-dot green"></div>
+        <div class="mockup-url">neillategan2-create.github.io/crc-stats-hostels1/</div>
+      </div>
+      <div class="mockup-body">
+        <div class="mockup-header">
+          <div class="mockup-logo-text">HOSTELS 1 — 2026</div>
+          <div class="mockup-tabs">
+            <div class="mockup-tab active">Overview</div>
+            <div class="mockup-tab">Home Cells</div>
+            <div class="mockup-tab">Trends</div>
+            <div class="mockup-tab">Analysis</div>
+          </div>
+        </div>
+        <div class="mockup-kpis">
+          <div class="mockup-kpi">
+            <div class="mockup-kpi-label">Total Members</div>
+            <div class="mockup-kpi-num kpi-gold">247</div>
+          </div>
+          <div class="mockup-kpi">
+            <div class="mockup-kpi-label">Avg Attendance</div>
+            <div class="mockup-kpi-num kpi-blue">68%</div>
+          </div>
+          <div class="mockup-kpi">
+            <div class="mockup-kpi-label">Home Cells</div>
+            <div class="mockup-kpi-num kpi-green">14</div>
+          </div>
+          <div class="mockup-kpi">
+            <div class="mockup-kpi-label">YTD Growth</div>
+            <div class="mockup-kpi-num kpi-red">+12%</div>
+          </div>
+        </div>
+        <div class="mockup-charts">
+          <div class="mockup-chart-box">
+            <div class="mockup-chart-title">Weekly Attendance Trend</div>
+            <div class="mockup-bars">
+              <div class="m-bar" style="height:55%"></div>
+              <div class="m-bar" style="height:70%"></div>
+              <div class="m-bar" style="height:45%"></div>
+              <div class="m-bar" style="height:80%"></div>
+              <div class="m-bar" style="height:65%"></div>
+              <div class="m-bar" style="height:90%"></div>
+              <div class="m-bar" style="height:75%"></div>
+            </div>
+          </div>
+          <div class="mockup-chart-box">
+            <div class="mockup-chart-title">Home Cell Performance</div>
+            <div class="mockup-bars">
+              <div class="m-bar" style="height:90%; background:rgba(78,203,141,0.3)"></div>
+              <div class="m-bar" style="height:60%; background:rgba(78,203,141,0.3)"></div>
+              <div class="m-bar" style="height:75%; background:rgba(78,203,141,0.3)"></div>
+              <div class="m-bar" style="height:50%; background:rgba(78,203,141,0.3)"></div>
+              <div class="m-bar" style="height:85%; background:rgba(78,203,141,0.3)"></div>
+              <div class="m-bar" style="height:40%; background:rgba(78,203,141,0.3)"></div>
+              <div class="m-bar" style="height:95%; background:rgba(78,203,141,0.3)"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-number">02 / 06</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     SLIDE 3 — FEATURES
+══════════════════════════════════════════ -->
+<section class="slide" id="slide-features">
+  <div class="slide-inner">
+    <div class="section-eyebrow red">Platform Capabilities</div>
+    <h2 class="section-heading">WHAT IT<br>CAN DO</h2>
+
+    <div class="feat-grid">
+
+      <div class="feat-card" style="--card-accent: linear-gradient(90deg, #e8b04b, #d4933a)">
+        <span class="feat-icon">📊</span>
+        <div class="feat-title">Live KPI Metrics</div>
+        <p class="feat-desc">
+          Real-time cards showing total members, average attendance, active home cells,
+          and year-on-year growth — always current, always visible.
+        </p>
+      </div>
+
+      <div class="feat-card" style="--card-accent: linear-gradient(90deg, #5b8fff, #3a6fd8)">
+        <span class="feat-icon">📈</span>
+        <div class="feat-title">Trend Charts</div>
+        <p class="feat-desc">
+          Interactive bar and line charts tracking weekly, monthly, and yearly attendance
+          trends. See patterns and momentum at a glance.
+        </p>
+      </div>
+
+      <div class="feat-card" style="--card-accent: linear-gradient(90deg, #4ecb8d, #2fa870)">
+        <span class="feat-icon">🏠</span>
+        <div class="feat-title">Home Cell Tracking</div>
+        <p class="feat-desc">
+          Individual performance bars for every home cell — compare which cells are
+          thriving and which ones need attention.
+        </p>
+      </div>
+
+      <div class="feat-card" style="--card-accent: linear-gradient(90deg, #a060d0, #7b2fa8)">
+        <span class="feat-icon">🔗</span>
+        <div class="feat-title">Google Sheets Integration</div>
+        <p class="feat-desc">
+          The dashboard reads directly from a live Google Sheet. Update the sheet —
+          the dashboard updates. No extra steps, no manual re-export.
+        </p>
+      </div>
+
+      <div class="feat-card" style="--card-accent: linear-gradient(90deg, #f06b6b, #c84848)">
+        <span class="feat-icon">📱</span>
+        <div class="feat-title">Works On Any Device</div>
+        <p class="feat-desc">
+          Fully responsive — accessible from a phone, tablet, or desktop.
+          Share the URL and anyone can view the live stats instantly.
+        </p>
+      </div>
+
+      <div class="feat-card" style="--card-accent: linear-gradient(90deg, #e8b04b, #5b8fff)">
+        <span class="feat-icon">🌐</span>
+        <div class="feat-title">Publicly Hosted</div>
+        <p class="feat-desc">
+          Deployed on GitHub Pages — always online, no server costs,
+          accessible 24/7 from anywhere in the world via a simple URL.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="slide-number">03 / 06</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     SLIDE 4 — HOW IT WORKS
+══════════════════════════════════════════ -->
+<section class="slide" id="slide-how">
+  <div class="slide-inner">
+    <div class="section-eyebrow red">Architecture</div>
+    <h2 class="section-heading">HOW IT<br>WORKS</h2>
+    <p class="section-body">
+      A simple, robust pipeline — data flows from the source to the screen
+      automatically, with minimal effort from leadership.
+    </p>
+
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <span class="pipeline-icon">📋</span>
+        <div class="pipeline-title">Google Sheets</div>
+        <p class="pipeline-desc">Leaders enter attendance & stats into a shared spreadsheet</p>
+      </div>
+      <div class="pipeline-gap"></div>
+      <div class="pipeline-step">
+        <span class="pipeline-icon">⚡</span>
+        <div class="pipeline-title">Auto Sync</div>
+        <p class="pipeline-desc">Published CSV feed connects the sheet to the dashboard in real time</p>
+      </div>
+      <div class="pipeline-gap"></div>
+      <div class="pipeline-step">
+        <span class="pipeline-icon">🖥️</span>
+        <div class="pipeline-title">HTML Dashboard</div>
+        <p class="pipeline-desc">Charts, KPIs and tables render automatically from the live data</p>
+      </div>
+      <div class="pipeline-gap"></div>
+      <div class="pipeline-step">
+        <span class="pipeline-icon">🌐</span>
+        <div class="pipeline-title">GitHub Pages</div>
+        <p class="pipeline-desc">One-click deploy publishes the updated dashboard to a live URL</p>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <p>
+        <strong>Zero friction for leaders.</strong> They don't need to understand
+        the technology — they enter data the way they already do it,
+        and the dashboard handles everything else automatically.
+      </p>
+    </div>
+  </div>
+
+  <div class="slide-number">04 / 06</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     SLIDE 5 — FUTURE ROADMAP
+══════════════════════════════════════════ -->
+<section class="slide" id="slide-future">
+  <div class="slide-inner">
+    <div class="section-eyebrow future">What's Coming</div>
+    <h2 class="section-heading">THE ROADMAP<br><span style="color:var(--text-muted); font-size:0.6em">WHAT WE'RE BUILDING NEXT</span></h2>
+    <p class="section-body">
+      The Hostels 1 dashboard is just the beginning. Here's what the platform
+      grows into as we build it out.
+    </p>
+
+    <div class="roadmap-grid">
+
+      <!-- JOTFORMS -->
+      <div class="roadmap-card">
+        <div class="roadmap-card-bg" style="background:#5b9fff"></div>
+        <span class="roadmap-tag tag-blue">Phase 2 · Data Collection</span>
+        <span class="roadmap-icon">📝</span>
+        <div class="roadmap-title">JotForms Integration</div>
+        <p class="roadmap-body">
+          Home cell leaders fill in a simple online form after every meeting.
+          That submission automatically updates the Google Sheet — and the dashboard
+          refreshes itself. No manual data entry, no chasing people for numbers.
+        </p>
+        <ul class="roadmap-bullets">
+          <li>Leader submits a JotForm after home cell</li>
+          <li>JotForm triggers automatic Google Sheets update</li>
+          <li>Dashboard reflects new data in real time</li>
+          <li>Zero manual data management for zone leaders</li>
+        </ul>
+      </div>
+
+      <!-- ZONE-WIDE -->
+      <div class="roadmap-card">
+        <div class="roadmap-card-bg" style="background:#4ecb8d"></div>
+        <span class="roadmap-tag tag-green">Phase 2 · Expansion</span>
+        <span class="roadmap-icon">🗺️</span>
+        <div class="roadmap-title">Full Zone View</div>
+        <p class="roadmap-body">
+          Right now we see Hostels 1. The same system can be replicated for
+          every structure in the zone — giving leadership a bird's-eye view
+          of the entire region, not just one structure.
+        </p>
+        <ul class="roadmap-bullets">
+          <li>Dashboard per structure (Hostels 2, 3, Campus, etc.)</li>
+          <li>Zone overview — aggregate stats across all structures</li>
+          <li>Compare performance between structures</li>
+          <li>Zone leadership sees everything in one place</li>
+        </ul>
+      </div>
+
+      <!-- LEADER PROFILES -->
+      <div class="roadmap-card">
+        <div class="roadmap-card-bg" style="background:#a060d0"></div>
+        <span class="roadmap-tag tag-purple">Phase 3 · People</span>
+        <span class="roadmap-icon">👥</span>
+        <div class="roadmap-title">Leader Profiles</div>
+        <p class="roadmap-body">
+          A dedicated page for every leader — tracking their gifts, strengths,
+          personality, and where they operate best. Built as relationships grow.
+          Enables intentional deployment of people into the right roles.
+        </p>
+        <ul class="roadmap-bullets">
+          <li>Individual profile per leader — gifts &amp; strengths</li>
+          <li>Updated as you meet and build relationships</li>
+          <li>Match leaders by gifting and leadership style</li>
+          <li>See who to connect, who to develop, who to elevate</li>
+        </ul>
+      </div>
+
+      <!-- GOALS TRACKING -->
+      <div class="roadmap-card">
+        <div class="roadmap-card-bg" style="background:#f0a050"></div>
+        <span class="roadmap-tag tag-orange">Phase 3 · Accountability</span>
+        <span class="roadmap-icon">🎯</span>
+        <div class="roadmap-title">Goals Tracking</div>
+        <p class="roadmap-body">
+          Every structure gets their goals defined and loaded into the system.
+          The dashboard then tracks actual performance against those goals in real
+          time — so leaders always know where they stand.
+        </p>
+        <ul class="roadmap-bullets">
+          <li>Set attendance, growth, and home cell targets per structure</li>
+          <li>Progress bars showing actual vs goal in real time</li>
+          <li>Zone-wide goal summary for senior leadership</li>
+          <li>Identify who is ahead, on track, or needs support</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="slide-number">05 / 06</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     SLIDE 6 — VISION / CLOSING
+══════════════════════════════════════════ -->
+<section class="slide" id="slide-vision">
+  <div class="slide-inner">
+    <div class="section-eyebrow purple">The Big Picture</div>
+    <h2 class="section-heading">ONE ECOSYSTEM<br>FOR THE WHOLE ZONE</h2>
+    <p class="section-body">
+      What we've built is a foundation. The vision is a single, integrated platform
+      where every structure, every leader, and every goal is visible —
+      giving CRC leadership the clarity to lead with confidence.
+    </p>
+
+    <div class="vision-grid">
+
+      <div class="vision-card">
+        <div class="vision-num">01</div>
+        <div class="vision-label">Live Data Dashboard<br><span style="color:var(--text-dim); font-size:11px">Hostels 1 · Active Now</span></div>
+      </div>
+
+      <div class="vision-card">
+        <div class="vision-num">02</div>
+        <div class="vision-label">JotForms Auto-Pipeline<br><span style="color:var(--text-dim); font-size:11px">Zero-friction data entry</span></div>
+      </div>
+
+      <div class="vision-card">
+        <div class="vision-num">03</div>
+        <div class="vision-label">Full Zone Coverage<br><span style="color:var(--text-dim); font-size:11px">Every structure tracked</span></div>
+      </div>
+
+      <div class="vision-card">
+        <div class="vision-num">04</div>
+        <div class="vision-label">Leader Profiles<br><span style="color:var(--text-dim); font-size:11px">Gifts · Strengths · Deployment</span></div>
+      </div>
+
+      <div class="vision-card">
+        <div class="vision-num">05</div>
+        <div class="vision-label">Goals Tracking<br><span style="color:var(--text-dim); font-size:11px">Targets vs actual · Zone view</span></div>
+      </div>
+
+      <div class="vision-card">
+        <div class="vision-num">∞</div>
+        <div class="vision-label">Scalable Foundation<br><span style="color:var(--text-dim); font-size:11px">Built to grow with CRC</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="slide-number">06 / 06</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     CLOSING CTA
+══════════════════════════════════════════ -->
+<section class="cta-section">
+  <div class="cta-orb"></div>
+
+  <div class="cta-logo">CRC</div>
+
+  <h2 class="cta-heading">
+    SEE IT<br><span class="grad-text">LIVE</span>
+  </h2>
+
+  <p class="cta-body">
+    The Hostels 1 dashboard is live right now.
+    Open the link below on any device to see real data,
+    real charts, and real-time stats.
+  </p>
+
+  <div class="cta-url">
+    <span>https://</span>neillategan2-create.github.io<span>/crc-stats-hostels1/</span>
+  </div>
+
+  <p style="font-size:13px; color:var(--text-dim); margin-top:16px;">
+    CRC Regions &amp; Structures · Hostels Zone · 2026
+  </p>
+</section>
+
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-logo">
+    <div class="footer-logo-circle">CRC</div>
+    <div class="footer-logo-text">CRC STATS PLATFORM · HOSTELS 1</div>
+  </div>
+  <div class="footer-right">BUILT 2026 · CONFIDENTIAL INTERNAL USE</div>
+</footer>
+
+</body>
+</html>
